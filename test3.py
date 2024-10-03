@@ -1,22 +1,20 @@
-from telethon.sync import TelegramClient
-from telethon.tl.functions.channels import GetFullChannelRequest
-from settings import api_id
-from settings import api_hash
-from settings import bot_token
+import re
+# Функция для извлечения takeProfit и stopLoss из текста сообщения
+def extract_trade_parameters(message):
+    # Регулярное выражение для поиска takeProfit и stopLoss
+    take_profit = re.search(r'takeProfit\s*:\s*(\d+\.?\d*)', message)
+    stop_loss = re.search(r'stopLoss\s*:\s*(\d+\.?\d*)', message)
 
-# Инициализация клиента
-client = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
-async def get_channel_id():
-    channel = await client.get_entity('@Tatarstan24TV')
-    print(f"ID канала: {channel.id}")
+    if take_profit and stop_loss:
+        return float(take_profit.group(1)), float(stop_loss.group(1))
+    return None, None
 
-#with client:
-#    client.loop.run_until_complete(get_channel_id())
 
-async def get_messages():
-    messages = await client.get_messages('@Tatarstan24TV', limit=10)
-    for message in messages:
-        print(message.text)
+message = "Торговый сигнал: покупка EUR/USD. takeProfit: 1.2500, stopLoss: 1.2000."
 
-with client:
-    client.loop.run_until_complete(get_messages())
+# Вызов функции с примерным сообщением
+take_profit, stop_loss = extract_trade_parameters(message)
+
+# Вывод результатов
+print("Take Profit:", take_profit)
+print("Stop Loss:", stop_loss)
