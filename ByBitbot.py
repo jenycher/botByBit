@@ -1,5 +1,5 @@
 from telethon import TelegramClient, events
-from settings import api_id, api_hash, phone_number, passw2FA,api_key,api_secret
+from settings import api_id, api_hash, phone_number, passw2FA, api_key, api_secret
 from pybit.unified_trading import HTTP
 import re
 
